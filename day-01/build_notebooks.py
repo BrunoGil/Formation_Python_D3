@@ -18,6 +18,10 @@ from __future__ import annotations
 import nbformat
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
+# Public repo location, so notebooks can read the data straight from the web
+# (no upload needed in Colab). A local ./data copy, if present, is used instead.
+RAW_BASE = "https://raw.githubusercontent.com/hjoaquim/lidl-ws/main/day-01"
+
 # --------------------------------------------------------------------------- #
 # helpers
 # --------------------------------------------------------------------------- #
@@ -360,28 +364,19 @@ ways: from a **CSV**, from **Excel**, and from a **Google Sheet**.
 T(md("""
 ### 4a. From a CSV file
 
-📝 **In Colab:** run the cell below and upload `retail_sales.csv` when prompted.
-The file then lives next to your notebook, so `pd.read_csv("retail_sales.csv")`
-finds it.
+📝 We read the data **straight from the course repository** over the web — no
+download, no upload. `pd.read_csv(...)` is happy to take a URL.
 """))
 
-T(code("""
-# In Colab, this opens a file picker. (Locally it's skipped automatically.)
-try:
-    from google.colab import files
-    files.upload()   # choose retail_sales.csv (and retail_sales.xlsx)
-except ImportError:
-    print("Not on Colab — assuming the data files are already alongside this notebook.")
-"""))
-
-T(code("""
+T(code(f"""
 import pandas as pd
 from pathlib import Path
 
-# Works whether the file sits in ./data (local) or next to the notebook (Colab).
-csv_path = "data/retail_sales.csv" if Path("data/retail_sales.csv").exists() else "retail_sales.csv"
+# Reads from the repo over the web. (If a local ./data copy exists, it's used.)
+CSV_URL = "{RAW_BASE}/data/retail_sales.csv"
+csv_source = "data/retail_sales.csv" if Path("data/retail_sales.csv").exists() else CSV_URL
 
-sales = pd.read_csv(csv_path)
+sales = pd.read_csv(csv_source)
 sales.head()
 """))
 
@@ -408,10 +403,11 @@ Same idea, different function: `pd.read_excel`. We point it at the sheet tab
 named `"sales"`.
 """))
 
-T(code("""
-xlsx_path = "data/retail_sales.xlsx" if Path("data/retail_sales.xlsx").exists() else "retail_sales.xlsx"
+T(code(f"""
+XLSX_URL = "{RAW_BASE}/data/retail_sales.xlsx"
+xlsx_source = "data/retail_sales.xlsx" if Path("data/retail_sales.xlsx").exists() else XLSX_URL
 
-sales_xl = pd.read_excel(xlsx_path, sheet_name="sales")
+sales_xl = pd.read_excel(xlsx_source, sheet_name="sales")
 sales_xl.head()
 """))
 
@@ -493,25 +489,17 @@ empty cell with a `# TODO`. Fill it in and run it.
 
 There is a matching **solution notebook** — try every problem first, then check.
 
-> **Setup:** if you're on Colab, run the upload cell below and pick
-> `retail_sales.csv`. Then run the import cell.
+> **Setup:** just run the import cell below — it loads the data straight from
+> the course repository, so there's nothing to download.
 """
 
-EX_SETUP_CODE = """
-# Colab only: upload retail_sales.csv when prompted.
-try:
-    from google.colab import files
-    files.upload()
-except ImportError:
-    print("Not on Colab — assuming retail_sales.csv is alongside this notebook.")
-"""
-
-EX_IMPORT_CODE = """
+EX_IMPORT_CODE = f"""
 import pandas as pd
 from pathlib import Path
 
-csv_path = "data/retail_sales.csv" if Path("data/retail_sales.csv").exists() else "retail_sales.csv"
-sales = pd.read_csv(csv_path)
+CSV_URL = "{RAW_BASE}/data/retail_sales.csv"
+csv_source = "data/retail_sales.csv" if Path("data/retail_sales.csv").exists() else CSV_URL
+sales = pd.read_csv(csv_source)
 sales.head()
 """
 
@@ -542,7 +530,7 @@ EXERCISES = [
         'prices = {"Milk": 0.89, "Bread": 1.99}\nprices["Bread"] = 2.09\nprint(prices)',
     ),
     (
-        "## Part B — Exploring the data\n\nMake sure you've run the setup and import cells above so `sales` exists.",
+        "## Part B — Exploring the data\n\nMake sure you've run the import cell above so `sales` exists.",
         "**B1.** Print the **shape** of `sales` (rows, columns) and the list of "
         "column names.",
         'print(sales.shape)\nprint(list(sales.columns))',
@@ -610,10 +598,9 @@ EXERCISES = [
 
 
 def build_exercise_notebooks():
-    ex_cells = [md(EX_INTRO), code(EX_SETUP_CODE), code(EX_IMPORT_CODE)]
+    ex_cells = [md(EX_INTRO), code(EX_IMPORT_CODE)]
     sol_cells = [
         md(EX_INTRO.replace("# Day 1 — Practice Exercises", "# Day 1 — Practice Exercises (Solutions)")),
-        code(EX_SETUP_CODE),
         code(EX_IMPORT_CODE),
     ]
 

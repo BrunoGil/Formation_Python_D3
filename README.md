@@ -12,5 +12,6 @@ analytics.
 | Day 3 | Visualizing & Reporting |
 | Day 4 | From Notebook to Pipeline (+ Airflow awareness) |
 
-Each day has its own folder with a `README`, teaching notebook, exercises, and
-solutions. See [`day-01/README.md`](day-01/README.md) to get started.
+Each day has its own folder with a `README`, teaching notebook, and exercises.
+Open notebooks with one click via the **Open in Colab** badges in each day's
+README — start with [`day-01/README.md`](day-01/README.md).
