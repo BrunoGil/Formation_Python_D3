@@ -59,7 +59,8 @@ def write(cells, path, title):
 teaching = []
 T = teaching.append
 
-T(md("""
+T(
+    md("""
 # Day 1 — Python for Data Analytics
 ### Foundations + Getting Your Data In
 
@@ -75,9 +76,11 @@ into a notebook. By the end of the session you will be able to:
 2. Python essentials for analysts
 3. Intro to pandas
 4. Hands-on: getting your data in
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ## How to use this notebook
 
 - Run a cell with **Shift + Enter**. Run them **in order**, top to bottom.
@@ -87,10 +90,12 @@ T(md("""
   know (Excel, Google Sheets, Power BI).
 
 Let's go.
-"""))
+""")
+)
 
 # ----- Block 1 -----------------------------------------------------------
-T(md("""
+T(
+    md("""
 ---
 ## Block 1 — Why Python for analytics
 
@@ -103,9 +108,11 @@ You already do analytics in Sheets, Excel, Power BI and SAP. So why Python?
   feed Power BI), so it *complements* them rather than replacing them.
 
 Here's a tiny taste. Don't worry about the syntax yet — just read it.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 import pandas as pd
 
 # A few sales rows, built by hand just for this example.
@@ -116,103 +123,133 @@ sales = pd.DataFrame({
 
 # Total revenue per store — the equivalent of a pivot table, in one line.
 sales.groupby("store")["revenue"].sum()
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 📝 That `groupby(...).sum()` is a pivot table. One readable line, and it will
 run identically on 10 rows or 10 million. That's the promise of Python for
 analytics.
-"""))
+""")
+)
 
 # ----- Block 2 -----------------------------------------------------------
-T(md("""
+T(
+    md("""
 ---
 ## Block 2 — Python essentials for analysts
 
 Just enough Python to be productive. We'll cover **variables**, **types**,
 **lists**, and **dictionaries** — the building blocks you'll use all day.
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Variables and types
 
 A **variable** is a named box that holds a value. You create one with `=`.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 store_name = "Porto-01"     # text          -> called a 'str' (string)
 units_sold = 18             # whole number  -> called an 'int'
 unit_price = 0.89           # decimal       -> called a 'float'
 is_open = True              # yes/no        -> called a 'bool'
 
 print(store_name, units_sold, unit_price, is_open)
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # 'type()' tells you what kind of value something is.
 print(type(store_name))
 print(type(units_sold))
 print(type(unit_price))
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # You can compute with variables, just like spreadsheet formulas.
 revenue = units_sold * unit_price
 print("Revenue:", revenue)
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** Create two variables, `units` (a whole number) and `price`
 (a decimal), then compute and print their `total`.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: create `units` and `price`, then compute `total` and print it.
 
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Lists
 
 A **list** is an ordered collection — think of a single column in a spreadsheet.
 Square brackets `[ ]`, items separated by commas.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 regions = ["Norte", "Centro", "Lisboa", "Alentejo", "Algarve"]
 
 print(regions)
 print("How many regions?", len(regions))
 print("First region:", regions[0])     # counting starts at 0!
 print("Last region:", regions[-1])     # -1 means 'last'
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # Add to a list, and loop over it.
 regions.append("Madeira")
 
 for region in regions:
     print("Region:", region)
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** Make a list called `products` with three product names,
 print how many there are, and print the second one.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: create `products`, print its length, print the second item.
 
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Dictionaries
 
 A **dictionary** stores **key → value** pairs, like a lookup table. Curly
 braces `{ }`. Great for "the price of each product" style data.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 prices = {
     "Whole Milk 1L": 0.89,
     "Sourdough Bread": 1.99,
@@ -225,20 +262,26 @@ print("Price of milk:", prices["Whole Milk 1L"])
 prices["Frozen Pizza"] = 3.19
 prices["Croissant"] = 0.79
 print(prices)
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** Build a dictionary `stock` mapping two product names to the
 number of units in stock, then print the stock of one of them.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: create `stock` and print one product's stock level.
 
-"""))
+""")
+)
 
 # ----- Block 3 -----------------------------------------------------------
-T(md("""
+T(
+    md("""
 ---
 ## Block 3 — Intro to pandas
 
@@ -247,9 +290,11 @@ a table with named columns and rows — exactly like a sheet tab.
 
 We'll build a small DataFrame by hand first, then load the real retail data in
 Block 4.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 import pandas as pd
 
 df = pd.DataFrame({
@@ -260,115 +305,157 @@ df = pd.DataFrame({
 })
 
 df
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Looking at a DataFrame
 
 These four are the first things you run on *any* new dataset.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 print("Shape (rows, columns):", df.shape)
 print("Column names:", list(df.columns))
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df.head(2)   # first rows — use df.tail(2) for the last ones
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df.info()    # column names, types, and how many values are non-empty
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df.describe()  # quick statistics for the numeric columns
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Selecting columns and rows
 
 Pick a column with `df["column_name"]`. Pick rows that match a condition by
 putting the condition inside the brackets — this is **filtering**.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df["store"]            # one column
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df[["store", "units_sold"]]   # several columns -> note the double brackets
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # Filtering: only rows in the Norte region.
 df[df["region"] == "Norte"]
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # Create a new column from existing ones — like dragging a formula down.
 df["revenue"] = df["units_sold"] * df["unit_price"]
 df
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** From `df`, select only the rows where `units_sold` is greater
 than 10. (Hint: copy the Norte example and change the condition.)
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: filter df to rows where units_sold > 10
 
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### Aggregating and sorting
 
 `value_counts()` counts categories. `groupby(...)` is your pivot table.
 `sort_values(...)` orders rows.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 df["region"].value_counts()
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # Total revenue per region (a pivot table).
 df.groupby("region")["revenue"].sum()
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # Sort rows by revenue, highest first.
 df.sort_values("revenue", ascending=False)
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** Compute the **average** `unit_price` per region.
 (Hint: same as the revenue example, but use `.mean()` instead of `.sum()`.)
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: average unit_price per region
 
-"""))
+""")
+)
 
 # ----- Block 4 -----------------------------------------------------------
-T(md("""
+T(
+    md("""
 ---
 ## Block 4 — Getting your data in (hands-on)
 
 So far we typed data by hand. Now we load the **real retail dataset** three
 ways: from a **CSV**, from **Excel**, and from a **Google Sheet**.
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### 4a. From a CSV file
 
 📝 We read the data **straight from the course repository** over the web — no
 download, no upload. `pd.read_csv(...)` is happy to take a URL.
-"""))
+""")
+)
 
-T(code(f"""
+T(
+    code(f"""
 import pandas as pd
 from pathlib import Path
 
@@ -378,46 +465,60 @@ csv_source = "data/retail_sales.csv" if Path("data/retail_sales.csv").exists() e
 
 sales = pd.read_csv(csv_source)
 sales.head()
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # The same four checks from Block 3 — always look before you leap.
 print(sales.shape)
 sales.info()
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn.** Show the **last** 5 rows of `sales`, and print the list of
 column names.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO: last 5 rows, then the column names
 
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### 4b. From an Excel file
 
 Same idea, different function: `pd.read_excel`. We point it at the sheet tab
 named `"sales"`.
-"""))
+""")
+)
 
-T(code(f"""
+T(
+    code(f"""
 XLSX_URL = "{RAW_BASE}/data/retail_sales.xlsx"
 xlsx_source = "data/retail_sales.xlsx" if Path("data/retail_sales.xlsx").exists() else XLSX_URL
 
 sales_xl = pd.read_excel(xlsx_source, sheet_name="sales")
 sales_xl.head()
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 💡 CSV vs Excel: a CSV is plain text (universal, lightweight, no formatting).
 Excel files can hold multiple tabs, formulas and styling. pandas reads both —
 you pick the right tool for the file you were given.
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ### 4c. From a Google Sheet (Colab)
 
 Your trainer has shared a read-only Google Sheet with your email. This is how
@@ -425,9 +526,11 @@ you pull it straight into pandas — no download step.
 
 📝 This cell only works **in Colab** (it uses Colab's Google sign-in). Run it,
 approve the access pop-up, and paste the shared sheet URL where indicated.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # --- Reading a Google Sheet from Colab ---
 try:
     from google.colab import auth
@@ -446,19 +549,25 @@ try:
     sales_gs.head()
 except ImportError:
     print("This cell is for Google Colab. Run it there to read the shared Sheet.")
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 🏋️ **Your turn (in Colab).** Once `sales_gs` is loaded, print its shape and use
 `value_counts()` to see how many rows each `region` has.
-"""))
+""")
+)
 
-T(code("""
+T(
+    code("""
 # TODO (run in Colab): sales_gs.shape, then sales_gs["region"].value_counts()
 
-"""))
+""")
+)
 
-T(md("""
+T(
+    md("""
 ---
 ## Recap
 
@@ -468,11 +577,12 @@ Today you:
 - Used a pandas **DataFrame** to inspect, select, filter and aggregate data
 - Loaded the retail data from **CSV**, **Excel** and a **Google Sheet**
 
-**Tomorrow (Day 2):** we clean this data — those missing values and messy
+**Day 2:** we clean this data — those missing values and messy
 category labels you may have spotted — and reshape it for analysis.
 
 Great work! 🎉
-"""))
+""")
+)
 
 
 # --------------------------------------------------------------------------- #
@@ -513,19 +623,19 @@ EXERCISES = [
     ),
     (
         None,
-        "**A2.** Make a list `categories` with: `\"Dairy\"`, `\"Bakery\"`, "
-        "`\"Frozen\"`. Print how many items it has and the **first** one.",
+        '**A2.** Make a list `categories` with: `"Dairy"`, `"Bakery"`, '
+        '`"Frozen"`. Print how many items it has and the **first** one.',
         'categories = ["Dairy", "Bakery", "Frozen"]\nprint(len(categories))\nprint(categories[0])',
     ),
     (
         None,
-        "**A3.** Loop over `categories` and print `\"Category: X\"` for each.",
+        '**A3.** Loop over `categories` and print `"Category: X"` for each.',
         'for c in categories:\n    print("Category:", c)',
     ),
     (
         None,
-        "**A4.** Build a dictionary `prices` with `\"Milk\": 0.89` and "
-        "`\"Bread\": 1.99`. Then change the price of Bread to `2.09` and print "
+        '**A4.** Build a dictionary `prices` with `"Milk": 0.89` and '
+        '`"Bread": 1.99`. Then change the price of Bread to `2.09` and print '
         "the dictionary.",
         'prices = {"Milk": 0.89, "Bread": 1.99}\nprices["Bread"] = 2.09\nprint(prices)',
     ),
@@ -533,7 +643,7 @@ EXERCISES = [
         "## Part B — Exploring the data\n\nMake sure you've run the import cell above so `sales` exists.",
         "**B1.** Print the **shape** of `sales` (rows, columns) and the list of "
         "column names.",
-        'print(sales.shape)\nprint(list(sales.columns))',
+        "print(sales.shape)\nprint(list(sales.columns))",
     ),
     (
         None,
@@ -554,7 +664,7 @@ EXERCISES = [
     ),
     (
         "## Part C — Filtering and aggregating",
-        "**C1.** Filter `sales` to rows from the `\"Lisboa\"` region. How many "
+        '**C1.** Filter `sales` to rows from the `"Lisboa"` region. How many '
         "rows are there?",
         'lisboa = sales[sales["region"] == "Lisboa"]\nprint(lisboa.shape[0])\nlisboa.head()',
     ),
@@ -600,7 +710,12 @@ EXERCISES = [
 def build_exercise_notebooks():
     ex_cells = [md(EX_INTRO), code(EX_IMPORT_CODE)]
     sol_cells = [
-        md(EX_INTRO.replace("# Day 1 — Practice Exercises", "# Day 1 — Practice Exercises (Solutions)")),
+        md(
+            EX_INTRO.replace(
+                "# Day 1 — Practice Exercises",
+                "# Day 1 — Practice Exercises (Solutions)",
+            )
+        ),
         code(EX_IMPORT_CODE),
     ]
 
