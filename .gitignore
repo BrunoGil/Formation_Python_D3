@@ -218,6 +218,3 @@ __marimo__/
 .streamlit/secrets.toml
 
 instructor/
-
-# Exercise solutions (kept local, not distributed)
-*_solution.ipynb

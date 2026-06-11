@@ -6,6 +6,7 @@
 
 - **Teaching notebook** — [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hjoaquim/lidl-ws/blob/main/day-01/01_teaching.ipynb)
 - **Exercises** — [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hjoaquim/lidl-ws/blob/main/day-01/02_exercises.ipynb)
+- **Exercises (solutions)** — [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hjoaquim/lidl-ws/blob/main/day-01/02_exercises_solution.ipynb)
 
 Click a badge → it opens in Colab → edits save to *your* Google Drive. The data
 loads straight from this repo, so there is nothing to download or upload.
@@ -16,7 +17,7 @@ loads straight from this repo, so there is nothing to download or upload.
 |------|------------|
 | `01_teaching.ipynb` | The code-along lesson. Run top to bottom; exercise-heavy with 🏋️ "Your turn" cells throughout. |
 | `02_exercises.ipynb` | Standalone practice problems with `# TODO` gaps for attendees. |
-| `02_exercises_solution.ipynb` | The same problems, solved. Kept local — gitignored, not distributed. |
+| `02_exercises_solution.ipynb` | The same problems, solved. |
 | `data/` | The retail dataset (`csv` + `xlsx`) and Google Sheet setup notes. |
 | `generate_data.py` | Regenerates the dataset (deterministic). |
 | `build_notebooks.py` | Regenerates the notebooks from source content. |
