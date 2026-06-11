@@ -704,6 +704,36 @@ EXERCISES = [
         "`NaN` — that's expected.)",
         'sales["revenue_per_unit"] = sales["revenue"] / sales["units_sold"]\nsales.head()',
     ),
+    (
+        None,
+        "**D3.** Show the **top 3 stores** by total revenue. "
+        "(Hint: `groupby` the store, `.sum()` the revenue, sort descending, "
+        "then `.head(3)`.)",
+        'sales.groupby("store")["revenue"].sum().sort_values(ascending=False).head(3)',
+    ),
+    (
+        None,
+        "**D4.** Looking **only at the `Norte` region**, which `category` has the "
+        "highest total revenue? (Hint: filter to Norte first, then `groupby`.)",
+        'norte = sales[sales["region"] == "Norte"]\n'
+        'norte.groupby("category")["revenue"].sum().sort_values(ascending=False)',
+    ),
+    (
+        None,
+        "**D5.** What **share of total revenue** (as a %) does each region "
+        "represent? (Hint: revenue per region divided by the grand total, "
+        "times 100.)",
+        'by_region = sales.groupby("region")["revenue"].sum()\n'
+        "(by_region / by_region.sum() * 100).round(1)",
+    ),
+    (
+        None,
+        "**D6.** Turn the `date` column into a real date and find **total "
+        "revenue per month**. (Hint: `pd.to_datetime(sales[\"date\"])`, then "
+        "group by its `.dt.month`.)",
+        'sales["date"] = pd.to_datetime(sales["date"])\n'
+        'sales.groupby(sales["date"].dt.month)["revenue"].sum()',
+    ),
 ]
 
 
