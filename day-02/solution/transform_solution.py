@@ -1,0 +1,79 @@
+"""Step 2 — Transform & summarise the cleaned data.
+
+Fill in each `# TODO`, then run:
+
+    python src/transform.py
+
+Reads output/clean.csv (run clean.py first) and writes a few summary_*.csv
+files you could hand to a colleague or load into Power BI.
+"""
+from pathlib import Path
+
+import pandas as pd
+
+CLEAN = Path("output/clean.csv")
+OUT_DIR = Path("output")
+
+
+def load_clean() -> pd.DataFrame:
+    if not CLEAN.exists():
+        raise SystemExit("output/clean.csv not found — run `python src/clean.py` first.")
+    return pd.read_csv(CLEAN, parse_dates=["order_date", "ship_date"])
+
+
+def add_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Add two useful business metrics."""
+    # profit margin as a fraction of sales
+    df["profit_margin"] = df["profit"] / df["sales"]
+    # how many days between ordering and shipping
+    df["shipping_days"] = (df["ship_date"] - df["order_date"]).dt.days
+    return df
+
+
+def sales_by_region(df: pd.DataFrame) -> pd.DataFrame:
+    """Total sales and profit per region, biggest sales first."""
+    result = (
+        df.groupby("region")[["sales", "profit"]]
+        .sum()
+        .sort_values("sales", ascending=False)
+    )
+    return result
+
+
+def sales_by_category(df: pd.DataFrame) -> pd.Series:
+    """Total sales per category and sub_category, biggest first."""
+    result = (
+        df.groupby(["category", "sub_category"])["sales"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+    return result
+
+
+def top_products(df: pd.DataFrame, n: int = 10) -> pd.Series:
+    """The n products with the highest total sales."""
+    result = (
+        df.groupby("product_name")["sales"]
+        .sum()
+        .sort_values(ascending=False)
+        .head(n)
+    )
+    return result
+
+
+def main() -> None:
+    df = load_clean()
+    df = add_columns(df)
+
+    OUT_DIR.mkdir(exist_ok=True)
+    sales_by_region(df).to_csv(OUT_DIR / "summary_region.csv")
+    sales_by_category(df).to_csv(OUT_DIR / "summary_category.csv")
+    top_products(df).to_csv(OUT_DIR / "summary_top_products.csv")
+
+    print("Wrote summary_region.csv, summary_category.csv, summary_top_products.csv")
+    print("\nSales & profit by region:")
+    print(sales_by_region(df))
+
+
+if __name__ == "__main__":
+    main()
