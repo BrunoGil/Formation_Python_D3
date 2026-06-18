@@ -103,38 +103,62 @@ the rows we want, fix the messes real data always has, and summarise it.
 
 **Agenda**
 1. Select, filter, sort — your Sheets/Excel moves, in pandas
-2. Cleaning — missing values, types, duplicates, messy text
+2. Cleaning — names, types, missing values, duplicates, messy text
 3. Aggregation & grouping — pivot tables in one line
 4. The project — clean a real Kaggle dataset in your own repo (Codespaces)
 
-Run each cell with **Shift + Enter**. 🏋️ **Your turn** cells are for you.
+Run each cell with **Shift + Enter**, in order. 🏋️ **Your turn** cells are for
+you to fill in.
 """))
 
     # ----- a deliberately messy little table, reused throughout -----
     C(md("""
 ---
-## Our messy example
+## Our messy dataset
 
-Real data is never tidy. Here's a tiny table with the problems you'll meet all
-the time — we'll fix each one below.
+Real data is never tidy. Here's a small orders table with the problems you meet
+all the time. We'll explore it, then fix every issue — the same arc as today's
+project.
 """))
 
     C(code("""
 import pandas as pd
 
 raw = pd.DataFrame({
-    "Order ID":   ["A-1", "A-2", "A-3", "A-3", "A-4"],
-    "Category":   ["Furniture", " furniture", "OFFICE", "Office", "Technology"],
-    "Sales":      ["120.5", "90", "60", "60", "45.0"],   # numbers stored as text!
-    "Units":      [2, None, 1, 1, 3],                    # a missing value
-    "Order Date": ["1/5/2023", "2/8/2023", "3/2/2023", "3/2/2023", "4/9/2023"],
+    "Order ID":   ["A-1","A-2","A-3","A-4","A-5","A-6","A-7","A-8","A-9","A-10","A-11","A-12","A-3","A-6"],
+    "Region":     ["West","East","East","Central","West","Central","East","West","Central","East","West","Central","East","Central"],
+    "Category":   ["Furniture"," furniture","OFFICE","Office","Technology"," technology","Furniture","Office","Technology","Office","Furniture","Technology","OFFICE"," technology"],
+    "Sales":      ["120.5","90","60","45.0","300","150.75","80","200","75.25","110","95","60","60","150.75"],
+    "Units":      [2, None, 1, 3, 1, 2, None, 4, 1, 2, 3, 1, 1, 2],
+    "Order Date": ["1/5/2023","2/8/2023","3/2/2023","4/9/2023","5/1/2023","6/3/2023","7/7/2023","8/8/2023","9/9/2023","10/10/2023","11/11/2023","12/12/2023","3/2/2023","6/3/2023"],
 })
 raw
 """))
 
+    C(md("""
+The first thing you do with *any* new data: look at it. `.info()` shows the
+columns, their types, and how many values are filled in.
+"""))
+
     C(code("""
-# Always look first. What's wrong here?
 raw.info()
+"""))
+
+    C(md("""
+Spot the problems already:
+- `Sales` is stored as **text** (`object`), not numbers — we can't add it up yet.
+- `Units` has **missing** values (fewer non-null than rows).
+- `Order Date` is **text**, not a date.
+- `Category` is written inconsistently (`OFFICE`, `Office`, ` furniture`).
+- Some rows look **duplicated** (`A-3`, `A-6` appear twice).
+
+🏋️ **Your turn.** Print the **shape** of `raw` (rows, columns) and the list of
+its column names.
+"""))
+
+    C(code("""
+# TODO: print raw.shape and list(raw.columns)
+
 """))
 
     # ----- Block 1: select / filter / sort -----
@@ -145,25 +169,78 @@ raw.info()
 The everyday spreadsheet moves: pick columns, keep matching rows, order them.
 """))
 
-    C(code("""
-raw[["Order ID", "Category"]]          # pick columns
+    C(md("""
+### Selecting columns
+
+One column (a **Series**) uses single brackets. Several columns (a
+**DataFrame**) use double brackets.
 """))
 
     C(code("""
-raw[raw["Category"] == "Technology"]   # filter rows (like a spreadsheet filter)
+raw["Region"]            # one column -> a Series
 """))
 
     C(code("""
-raw.sort_values("Order ID", ascending=False)   # sort
+raw[["Order ID", "Sales"]]   # several columns -> a DataFrame (note the double [[ ]])
 """))
 
     C(md("""
-🏋️ **Your turn.** Show only the `Order ID` and `Sales` columns, for the rows
-whose `Order ID` is `"A-3"`.
+### Filtering rows
+
+Put a condition inside the brackets to keep only the rows where it's `True` —
+just like a spreadsheet filter.
 """))
 
     C(code("""
-# TODO: filter to Order ID == "A-3", then keep only Order ID and Sales
+raw[raw["Region"] == "West"]
+"""))
+
+    C(md("""
+Combine conditions with `&` (and) / `|` (or). **Each condition needs its own
+parentheses.**
+"""))
+
+    C(code("""
+raw[(raw["Region"] == "West") & (raw["Category"] == "Furniture")]
+"""))
+
+    C(code("""
+# Match any of several values with .isin(...)
+raw[raw["Region"].isin(["West", "East"])]
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Keep only the rows where `Region` is `"Central"`, and show
+just the `Order ID` and `Sales` columns.
+"""))
+
+    C(code("""
+# TODO: filter to Region == "Central", then select Order ID and Sales
+
+"""))
+
+    C(md("""
+### Sorting
+
+`sort_values` orders rows. You can sort by one column or several.
+"""))
+
+    C(code("""
+raw.sort_values("Order ID")
+"""))
+
+    C(code("""
+# Sort by Region first, then Order ID within each region.
+raw.sort_values(["Region", "Order ID"])
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Sort `raw` by `Region`, but in **descending** order.
+(Hint: `sort_values("Region", ascending=False)`.)
+"""))
+
+    C(code("""
+# TODO: sort by Region descending
 
 """))
 
@@ -172,63 +249,122 @@ whose `Order ID` is `"A-3"`.
 ---
 ## Block 2 — Cleaning
 
-### Fixing types
+Now we fix the mess, one issue at a time. Each fix below is exactly what you'll
+do on the real dataset in the project.
+"""))
 
-`Sales` is text (`"120.5"`), so we can't do maths on it. Convert it.
+    C(md("""
+### 1. Tidy the column names
+
+`"Order ID"` is awkward to type (spaces, capitals). Standardise to `order_id`
+style — lower case, no spaces.
 """))
 
     C(code("""
-raw["Sales"] = pd.to_numeric(raw["Sales"])
-raw["Order Date"] = pd.to_datetime(raw["Order Date"], format="%m/%d/%Y")
+raw.columns = raw.columns.str.strip().str.lower().str.replace(" ", "_")
+list(raw.columns)
+"""))
+
+    C(md("""
+📝 From here on the columns are `order_id`, `region`, `category`, `sales`,
+`units`, `order_date`.
+
+### 2. Fix the types
+
+`to_numeric` turns text into numbers; `to_datetime` turns text into real dates.
+"""))
+
+    C(code("""
+raw["sales"] = pd.to_numeric(raw["sales"])
+raw["order_date"] = pd.to_datetime(raw["order_date"], format="%m/%d/%Y")
 raw.dtypes
 """))
 
     C(md("""
-### Missing values
-
-`Units` has a gap. You can drop rows with gaps, or fill them.
+💡 If some values can't be converted (e.g. `"n/a"`), add `errors="coerce"` and
+pandas turns the bad ones into `NaN` instead of crashing:
 """))
 
     C(code("""
-print("missing per column:")
-print(raw.isna().sum())
-
-# Fill the missing Units with 0 (a choice — sometimes dropping is better).
-raw["Units"] = raw["Units"].fillna(0)
+pd.to_numeric(pd.Series(["10", "20", "n/a"]), errors="coerce")
 """))
 
     C(md("""
-### Duplicates
+🏋️ **Your turn.** Convert this price Series to numbers, turning the bad value
+into `NaN`: `pd.Series(["1.99", "3.50", "free"])`.
+"""))
 
-Rows `A-3` appear twice. Drop exact duplicates.
+    C(code("""
+# TODO: pd.to_numeric(..., errors="coerce")
+
+"""))
+
+    C(md("""
+### 3. Handle missing values
+
+See where the gaps are, then decide: **fill** them or **drop** them.
+"""))
+
+    C(code("""
+raw.isna().sum()
+"""))
+
+    C(code("""
+# Option A: fill the missing Units with 0.
+raw["units"] = raw["units"].fillna(0)
+
+# Option B (not used here): raw.dropna(subset=["units"]) would drop those rows.
+raw["units"].isna().sum()
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Imagine `s = pd.Series([10, None, 30])`. Fill the missing
+value with the **mean** of the series. (Hint: `s.fillna(s.mean())`.)
+"""))
+
+    C(code("""
+# TODO: fill the missing value with the mean
+s = pd.Series([10, None, 30])
+
+"""))
+
+    C(md("""
+### 4. Remove duplicates
+
+`duplicated()` flags repeated rows; `drop_duplicates()` removes them.
 """))
 
     C(code("""
 print("duplicate rows:", raw.duplicated().sum())
 raw = raw.drop_duplicates()
-raw
+print("rows now:", len(raw))
 """))
 
     C(md("""
-### Messy text
+💡 You can also dedupe on *specific* columns: `drop_duplicates(subset=["order_id"])`
+keeps one row per order id.
 
-`Category` has `"OFFICE"`, `"Office"`, `" furniture"` — same things, written
+### 5. Clean up messy text
+
+`category` has `"OFFICE"`, `"Office"`, `" furniture"` — the same things written
 differently. Strip spaces and standardise the case.
 """))
 
     C(code("""
-raw["Category"] = raw["Category"].str.strip().str.title()
-raw["Category"].value_counts()
+raw["category"] = raw["category"].str.strip().str.title()
+raw["category"].value_counts()
 """))
 
     C(md("""
-🏋️ **Your turn.** Imagine a column had values `["YES", "yes", " Yes "]`. Write
-one line that turns all three into the same value `"Yes"`.
-(Hint: `.str.strip().str.title()` on a small `pd.Series([...])`.)
+💡 For known one-off fixes, `replace` maps specific values to new ones, e.g.
+`df["region"].replace({"W": "West", "E": "East"})`.
+
+🏋️ **Your turn.** Normalise this Series so all three become `"Yes"`:
+`pd.Series(["YES", "yes", " Yes "])`. (Hint: `.str.strip().str.title()`.)
 """))
 
     C(code("""
-# TODO: normalise pd.Series(["YES", "yes", " Yes "]) to all "Yes"
+# TODO: normalise to all "Yes"
 
 """))
 
@@ -237,24 +373,68 @@ one line that turns all three into the same value `"Yes"`.
 ---
 ## Block 3 — Aggregation & grouping
 
-`groupby` is the pivot table. `value_counts` counts categories.
+Our data is clean — now we summarise it. `value_counts` counts categories;
+`groupby` is the pivot table.
 """))
 
     C(code("""
-raw.groupby("Category")["Sales"].sum()          # total sales per category
+raw["region"].value_counts()
 """))
 
     C(code("""
-# Several stats at once.
-raw.groupby("Category")["Sales"].agg(["sum", "mean", "count"])
+# Add normalize=True to get proportions instead of counts.
+raw["region"].value_counts(normalize=True)
 """))
 
     C(md("""
-🏋️ **Your turn.** Compute the **average** `Sales` per `Category`.
+### groupby — the pivot table
+
+Split the data into groups, then compute something per group.
 """))
 
     C(code("""
-# TODO: average Sales per Category
+raw.groupby("region")["sales"].sum()          # total sales per region
+"""))
+
+    C(code("""
+# Several statistics at once.
+raw.groupby("region")["sales"].agg(["sum", "mean", "count"])
+"""))
+
+    C(code("""
+# Group by two columns: sales per region AND category.
+raw.groupby(["region", "category"])["sales"].sum()
+"""))
+
+    C(md("""
+### pivot_table — a 2-D summary
+
+`pivot_table` lays groups out as a grid — regions down the side, categories
+across the top — exactly like a spreadsheet pivot table.
+"""))
+
+    C(code("""
+pd.pivot_table(raw, values="sales", index="region", columns="category",
+               aggfunc="sum", fill_value=0)
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Compute the **average** `sales` per `category`.
+(Hint: `groupby("category")` then `.mean()` on `sales`.)
+"""))
+
+    C(code("""
+# TODO: average sales per category
+
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Compute the **total `units`** sold per `region`, and sort the
+result from highest to lowest.
+"""))
+
+    C(code("""
+# TODO: total units per region, sorted descending
 
 """))
 
@@ -263,8 +443,8 @@ raw.groupby("Category")["Sales"].agg(["sum", "mean", "count"])
 ---
 ## Block 4 — The project (your turn, for real)
 
-Now you'll do this on a **real dataset**, in your **own repository**, using
-**GitHub Codespaces** — just like a real data project.
+Now you'll do all of this on a **real dataset**, in your **own repository**,
+using **GitHub Codespaces** — just like a real data project.
 
 **The dataset:** *Sample - Superstore* on Kaggle (retail orders).
 **Setup:** follow the repo's `README.md` to create your repo from the template
@@ -276,12 +456,13 @@ Then work through, filling in the `# TODO`s:
 | Step | File | What you'll do |
 |------|------|----------------|
 | 0 | `src/explore.py` | run it — see what's messy (nothing to fill in) |
-| 1 | `src/clean.py` | encoding, dates, drop columns, duplicates, missing values |
+| 1 | `src/clean.py` | encoding, names, dates, drop columns, duplicates, missing values |
 | 2 | `src/transform.py` | new columns, group & summarise, save `summary_*.csv` |
 | 3 | `src/questions.py` | answer business questions with code |
 
-Finish by **committing your `output/` files** — you'll have shipped a small,
-reproducible cleaning pipeline. 🚀
+Everything you need is in the blocks above — names, types, missing values,
+duplicates, text, and `groupby`. Finish by **committing your `output/` files**:
+you'll have shipped a small, reproducible cleaning pipeline. 🚀
 """))
 
     nb = new_notebook(cells=cells)
