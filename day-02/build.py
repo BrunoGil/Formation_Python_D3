@@ -448,10 +448,9 @@ Leadership just dropped a messy data export on your desk and a list of
 questions. Your job: clean it, summarise it, and brief them — in your **own
 repository**, using **GitHub Codespaces**, just like a real data team.
 
-**The dataset:** *Sample - Superstore* on Kaggle (retail orders).
-**Setup:** follow the repo's `README.md` to create your repo from the template
-and open it in Codespaces, then download the CSV into `data/` (see
-`data/README.md`).
+**The dataset:** *Sample - Superstore* (retail orders) — already bundled in
+`data/`; it originally comes from Kaggle (see `data/README.md`).
+**Setup:** create your repo from the template, open it in Codespaces, and go.
 
 Then work through, filling in the `# TODO`s:
 
@@ -555,14 +554,20 @@ predict its profit?*
 We split the data into a **training** set (the model learns from it) and a
 **test** set (unseen orders, to check it generalises).
 """),
+        ("code", """
+# Models can't handle missing values. Keep only the rows that have all the
+# numbers we need. (Your cleaned data should already be fine — this is a safety net.)
+ml_df = df.dropna(subset=["sales", "quantity", "discount", "profit"]).copy()
+print(f"{len(ml_df)} rows ready for modelling")
+"""),
         ("ex",
          """
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
 features = ["sales", "quantity", "discount"]   # the "clues"
-X = df[features]
-y = df["profit"]                               # what we want to predict
+X = ml_df[features]
+y = ml_df["profit"]                            # what we want to predict
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=0)
@@ -578,8 +583,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
 features = ["sales", "quantity", "discount"]   # the "clues"
-X = df[features]
-y = df["profit"]                               # what we want to predict
+X = ml_df[features]
+y = ml_df["profit"]                            # what we want to predict
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=0)
@@ -605,10 +610,10 @@ label each order `1` (made a profit) or `0` (didn't), and train a model to guess
          """
 from sklearn.tree import DecisionTreeClassifier
 
-df["profitable"] = (df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
+ml_df["profitable"] = (ml_df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
 
-X = df[["sales", "quantity", "discount"]]
-y = df["profitable"]
+X = ml_df[["sales", "quantity", "discount"]]
+y = ml_df["profitable"]
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=0)
 
@@ -621,10 +626,10 @@ print("Accuracy on unseen orders:", round(clf.score(X_test, y_test), 3))
          """
 from sklearn.tree import DecisionTreeClassifier
 
-df["profitable"] = (df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
+ml_df["profitable"] = (ml_df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
 
-X = df[["sales", "quantity", "discount"]]
-y = df["profitable"]
+X = ml_df[["sales", "quantity", "discount"]]
+y = ml_df["profitable"]
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=0)
 

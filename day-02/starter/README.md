@@ -12,10 +12,13 @@ repository, running in **GitHub Codespaces**.
 3. Wait ~1 minute while it installs everything (pandas, Jupyter). Done — no
    setup on your laptop.
 
-## 2. Get the data
+## 2. The data
 
-Follow [`data/README.md`](data/README.md): download *Sample - Superstore* from
-Kaggle and drag the CSV into the `data/` folder.
+The dataset is **already in `data/`** (`Sample - Superstore.csv`) — nothing to
+download. It comes from **Kaggle**, the biggest public home for datasets:
+[kaggle.com/datasets/vivek468/superstore-dataset-final](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final).
+In a real project you'd fetch data from a source like this yourself — see
+[`data/README.md`](data/README.md) for how. Today it's bundled so you can dive in.
 
 ## 3. The teaching notebook
 

@@ -46,8 +46,8 @@ def main() -> None:
     print("Q4 — top segment by sales:", q4)
 
     # Q5: Which month (1-12) had the highest total sales?
-    #--SOLUTION:groupby order_date.dt.month, sum sales, .idxmax()
-    q5 = df.groupby(df["order_date"].dt.month)["sales"].sum().idxmax()
+    #--SOLUTION:groupby order_date.dt.month, sum sales, .idxmax(); wrap in int() for a clean month number
+    q5 = int(df.groupby(df["order_date"].dt.month)["sales"].sum().idxmax())
     #--END
     print("Q5 — best sales month:", q5)
 

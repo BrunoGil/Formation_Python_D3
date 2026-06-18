@@ -8,7 +8,7 @@ setup). Teaching notebook first, then a 3-step fill-in-the-blanks pipeline.
 
 | Time | Block |
 |------|-------|
-| ~20 min | Launch Codespace from the template, download the Kaggle CSV |
+| ~10 min | Launch Codespace from the template (dataset is already bundled) |
 | ~55 min | Teaching notebook (`01_teaching.ipynb`) — select/filter/sort, cleaning, grouping |
 | ~80 min | Independent exercise — `src/clean.py` → `transform.py` → `questions.py` |
 | ~20 min | 🎁 Bonus notebook (`02_predict.ipynb`) — charts + two guided ML teasers |
@@ -45,6 +45,11 @@ The starter scripts get `# TODO` gaps; `solution/` gets the complete versions.
 
 ## Dataset
 
-*Sample - Superstore* — https://www.kaggle.com/datasets/vivek468/superstore-dataset-final
-Quirks the exercise targets: Windows (cp1252) encoding, text dates, redundant
-columns, duplicate rows, missing postal codes.
+*Sample - Superstore* (~9,994 rows, 21 columns). It's **bundled in the template**
+(`data/Sample - Superstore.csv`) so there's no download friction; Kaggle is
+presented as a teaching point (where data comes from) rather than a setup step —
+origin: https://www.kaggle.com/datasets/vivek468/superstore-dataset-final
+
+Quirks the exercise targets: Windows (latin-1) encoding, text dates, redundant
+columns, duplicate rows, and — defensively — empty/blank rows and missing values
+(so the ML bonus never chokes on `NaN`).

@@ -49,6 +49,12 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def drop_empty_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """Some exports include blank rows with no real data — drop them."""
+    df = df.dropna(subset=["sales"])
+    return df
+
+
 def fix_missing(df: pd.DataFrame) -> pd.DataFrame:
     """Some rows (Burlington, Vermont) have no postal_code."""
     df["postal_code"] = df["postal_code"].fillna(0).astype(int)
@@ -61,6 +67,7 @@ def main() -> None:
     df = parse_dates(df)
     df = drop_unneeded(df)
     df = remove_duplicates(df)
+    df = drop_empty_rows(df)
     df = fix_missing(df)
 
     OUT.parent.mkdir(exist_ok=True)

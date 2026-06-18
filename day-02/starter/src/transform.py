@@ -23,10 +23,8 @@ def load_clean() -> pd.DataFrame:
 
 def add_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Add two useful business metrics."""
-    # profit margin as a fraction of sales
-    # TODO: df["profit_margin"] = df["profit"] / df["sales"]
-    # how many days between ordering and shipping
-    # TODO: df["shipping_days"] = (df["ship_date"] - df["order_date"]).dt.days
+    # TODO: add a column 'profit_margin' = profit as a fraction of sales
+    # TODO: add a column 'shipping_days' = number of days between order_date and ship_date
     return df
 
 

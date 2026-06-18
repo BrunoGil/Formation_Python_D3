@@ -1,24 +1,26 @@
-# Get the dataset
+# The dataset
 
-We use the **Sample - Superstore** dataset from Kaggle:
+`Sample - Superstore.csv` is **already here** — you don't need to download
+anything. This page just explains where it came from.
+
+## Where it's from: Kaggle 🏷️
+
+[Kaggle](https://www.kaggle.com) is the largest public catalogue of datasets
+(and a hub for data-science competitions) — a great first stop when you need
+data to work with. This is the classic **Sample - Superstore** retail dataset:
 
 ➡️ https://www.kaggle.com/datasets/vivek468/superstore-dataset-final
 
-## Steps
+## Getting data from Kaggle yourself (for later)
 
-1. Open the link (sign in to Kaggle — a free account) and click **Download**.
-2. If you get a `.zip`, unzip it. You want the file **`Sample - Superstore.csv`**.
-3. **Drag the CSV into this `data/` folder** in the Codespace file explorer
-   (left sidebar). That's it — no terminal, no API key.
-4. The file must be named exactly `Sample - Superstore.csv` (rename it if needed),
-   so the scripts can find it.
+In a real project the data won't be handed to you — you'll fetch it. Two ways:
 
-> **Why drag-and-drop?** Your Codespace runs in the cloud, so a browser
-> download lands on *your laptop*. Dragging the file into the explorer uploads
-> it into the Codespace.
+1. **Download in the browser** (most common): open the dataset page, sign in
+   (free account), click **Download**, unzip if needed, and drag the CSV into a
+   `data/` folder — exactly like this one.
+2. **Kaggle API** (for automation): create an API token in your Kaggle account,
+   then `pip install kaggle` and
+   `kaggle datasets download -d vivek468/superstore-dataset-final`.
 
-Check it landed:
-
-```bash
-ls -la "data/Sample - Superstore.csv"
-```
+> 💡 Real-world quirk: this file is **Windows-encoded**, not UTF-8 — which is
+> why the cleaning code reads it with `encoding="latin-1"`.
