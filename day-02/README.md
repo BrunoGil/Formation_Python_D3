@@ -9,9 +9,15 @@ setup). Teaching notebook first, then a 3-step fill-in-the-blanks pipeline.
 | Time | Block |
 |------|-------|
 | ~20 min | Launch Codespace from the template, download the Kaggle CSV |
-| ~60 min | Teaching notebook (`01_teaching.ipynb`) — select/filter/sort, cleaning, grouping |
-| ~95 min | Independent exercise — `src/clean.py` → `transform.py` → `questions.py` |
-| ~15 min | Commit results, wrap-up, bridge to Day 3 (visualising the cleaned data) |
+| ~55 min | Teaching notebook (`01_teaching.ipynb`) — select/filter/sort, cleaning, grouping |
+| ~80 min | Independent exercise — `src/clean.py` → `transform.py` → `questions.py` |
+| ~20 min | 🎁 Bonus notebook (`02_predict.ipynb`) — charts + two guided ML teasers |
+| ~5 min | Commit results, wrap-up, bridge to Day 3 |
+
+Framed as a story: attendees are "new analysts at Superstore" briefing
+leadership. The bonus notebook adds visual payoff and a curiosity-sparking
+intro to scikit-learn (regression + classification), mostly given with small
+`# TODO`s. It loads `output/clean.csv`, so it only works once `clean.py` runs.
 
 ## How this folder is organised
 

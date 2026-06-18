@@ -441,10 +441,12 @@ result from highest to lowest.
     # ----- Block 4: the project -----
     C(md("""
 ---
-## Block 4 — The project (your turn, for real)
+## Block 4 — The project: your first week at Superstore 🕵️
 
-Now you'll do all of this on a **real dataset**, in your **own repository**,
-using **GitHub Codespaces** — just like a real data project.
+**The scenario:** it's your first week as a data analyst at *Superstore*.
+Leadership just dropped a messy data export on your desk and a list of
+questions. Your job: clean it, summarise it, and brief them — in your **own
+repository**, using **GitHub Codespaces**, just like a real data team.
 
 **The dataset:** *Sample - Superstore* on Kaggle (retail orders).
 **Setup:** follow the repo's `README.md` to create your repo from the template
@@ -453,16 +455,16 @@ and open it in Codespaces, then download the CSV into `data/` (see
 
 Then work through, filling in the `# TODO`s:
 
-| Step | File | What you'll do |
-|------|------|----------------|
-| 0 | `src/explore.py` | run it — see what's messy (nothing to fill in) |
+| Step | File | Your mission |
+|------|------|--------------|
+| 0 | `src/explore.py` | size up the mess (nothing to fill in) |
 | 1 | `src/clean.py` | encoding, names, dates, drop columns, duplicates, missing values |
 | 2 | `src/transform.py` | new columns, group & summarise, save `summary_*.csv` |
-| 3 | `src/questions.py` | answer business questions with code |
+| 3 | `src/questions.py` | answer leadership's questions with code |
+| 🎁 | `notebooks/02_predict.ipynb` | **bonus:** chart your data, and let Python *predict* with it |
 
-Everything you need is in the blocks above — names, types, missing values,
-duplicates, text, and `groupby`. Finish by **committing your `output/` files**:
-you'll have shipped a small, reproducible cleaning pipeline. 🚀
+Everything you need is in the blocks above. Finish by **committing your
+`output/` files** — you'll have shipped a small, reproducible pipeline. 🚀
 """))
 
     nb = new_notebook(cells=cells)
@@ -478,10 +480,204 @@ you'll have shipped a small, reproducible cleaning pipeline. 🚀
     print(f"  wrote {out} ({len(cells)} cells)")
 
 
+def build_bonus_notebooks() -> None:
+    """Build the bonus 'see it & predict it' notebook in two forms from one spec.
+
+    Spec items:
+        ("md", text)                 -> identical markdown in both
+        ("code", src)                -> identical code in both
+        ("ex", todo_src, solution_src) -> gapped code in starter, full in solution
+    """
+    items = [
+        ("md", """
+# 🎁 Bonus — See It & Predict It
+### Superstore analyst, day one (continued)
+
+You've cleaned the data and briefed leadership. Now the fun part: **see** your
+data as charts, and ask a bigger question — *can Python learn to predict?*
+
+> Run the cells in order. A couple have a small `# TODO` for you to complete.
+> Needs `output/clean.csv`, so run `python src/clean.py` first.
+"""),
+        ("code", """
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+# Find output/clean.csv whether this notebook runs from the repo root or notebooks/.
+clean_path = next((p for p in [Path("output/clean.csv"), Path("../output/clean.csv")]
+                   if p.exists()), None)
+if clean_path is None:
+    raise FileNotFoundError("output/clean.csv not found — run `python src/clean.py` first.")
+
+df = pd.read_csv(clean_path, parse_dates=["order_date", "ship_date"])
+print(df.shape)
+df.head()
+"""),
+        ("md", """
+---
+## Part A — See your data 📊
+
+With clean data, a chart is **one line** of pandas. (Day 3 goes deep on this —
+here's a taste.)
+"""),
+        ("code", """
+# Total sales by region.
+df.groupby("region")["sales"].sum().sort_values().plot(
+    kind="barh", title="Total sales by region")
+"""),
+        ("code", """
+# Sales trend across the months.
+df.groupby(df["order_date"].dt.month)["sales"].sum().plot(
+    marker="o", title="Sales by month")
+"""),
+        ("code", """
+# Profit by category — any surprises?
+df.groupby("category")["profit"].sum().plot(kind="bar", title="Profit by category")
+"""),
+        ("ex",
+         """
+# 🏋️ Your turn: chart the total quantity sold per region as a bar chart.
+# TODO: group by region, sum 'quantity', then .plot(kind="bar", title="Quantity by region")
+
+""",
+         """
+df.groupby("region")["quantity"].sum().plot(kind="bar", title="Quantity by region")
+"""),
+        ("md", """
+---
+## Part B — Your first ML model: predict profit 🤖
+
+**Machine learning** = let the computer learn patterns from data to make
+predictions. Let's ask: *given an order's sales, quantity and discount, can we
+predict its profit?*
+
+We split the data into a **training** set (the model learns from it) and a
+**test** set (unseen orders, to check it generalises).
+"""),
+        ("ex",
+         """
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+features = ["sales", "quantity", "discount"]   # the "clues"
+X = df[features]
+y = df["profit"]                               # what we want to predict
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0)
+
+model = LinearRegression()
+# TODO: train the model on the training data
+# hint: model.fit(X_train, y_train)
+
+print("R² on unseen orders:", round(model.score(X_test, y_test), 3))
+""",
+         """
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+features = ["sales", "quantity", "discount"]   # the "clues"
+X = df[features]
+y = df["profit"]                               # what we want to predict
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("R² on unseen orders:", round(model.score(X_test, y_test), 3))
+"""),
+        ("code", """
+# Use the trained model to predict the profit of a brand-new order.
+new_order = pd.DataFrame({"sales": [500], "quantity": [4], "discount": [0.1]})
+print("Predicted profit: €", round(model.predict(new_order)[0], 2))
+"""),
+        ("md", """
+---
+## Part C — Classification: *will* an order be profitable? 🎯
+
+Same idea, different question — a yes/no prediction instead of a number. We
+label each order `1` (made a profit) or `0` (didn't), and train a model to guess.
+"""),
+        ("ex",
+         """
+from sklearn.tree import DecisionTreeClassifier
+
+df["profitable"] = (df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
+
+X = df[["sales", "quantity", "discount"]]
+y = df["profitable"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0)
+
+clf = DecisionTreeClassifier(max_depth=3, random_state=0)
+# TODO: train the classifier
+# hint: clf.fit(X_train, y_train)
+
+print("Accuracy on unseen orders:", round(clf.score(X_test, y_test), 3))
+""",
+         """
+from sklearn.tree import DecisionTreeClassifier
+
+df["profitable"] = (df["profit"] > 0).astype(int)   # 1 = profit, 0 = loss
+
+X = df[["sales", "quantity", "discount"]]
+y = df["profitable"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0)
+
+clf = DecisionTreeClassifier(max_depth=3, random_state=0)
+clf.fit(X_train, y_train)
+
+print("Accuracy on unseen orders:", round(clf.score(X_test, y_test), 3))
+"""),
+        ("md", """
+---
+## That's a wrap 🎉
+
+In a few lines you charted real data **and** built two predictive models. This
+is just a spark — predicting and modelling is a whole field (and a future
+training!). For now: you cleaned messy data and made it *talk*.
+
+💬 **Discuss:** were the models any good? What other "clues" (columns) might
+help predict profit?
+"""),
+    ]
+
+    starter_cells, solution_cells = [], []
+    for item in items:
+        if item[0] == "md":
+            starter_cells.append(md(item[1]))
+            solution_cells.append(md(item[1]))
+        elif item[0] == "code":
+            starter_cells.append(code(item[1]))
+            solution_cells.append(code(item[1]))
+        elif item[0] == "ex":
+            starter_cells.append(code(item[1]))
+            solution_cells.append(code(item[2]))
+
+    meta = {
+        "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+        "language_info": {"name": "python", "version": "3"},
+    }
+    for cells, path in [
+        (starter_cells, NOTEBOOKS / "02_predict.ipynb"),
+        (solution_cells, SOLUTION / "02_predict_solution.ipynb"),
+    ]:
+        nb = new_notebook(cells=cells)
+        nb.metadata.update(meta)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        nbformat.write(nb, path)
+        print(f"  wrote {path} ({len(cells)} cells)")
+
+
 def main() -> None:
     print("Building Day 2...")
     build_scripts()
     build_notebook()
+    build_bonus_notebooks()
     print("Done.")
 
 

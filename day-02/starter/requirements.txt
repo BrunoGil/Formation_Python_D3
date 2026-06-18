@@ -2,3 +2,5 @@ pandas
 openpyxl
 jupyter
 ipykernel
+matplotlib
+scikit-learn

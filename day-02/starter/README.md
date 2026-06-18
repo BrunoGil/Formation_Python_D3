@@ -1,7 +1,9 @@
-# Day 2 — Clean a Real Dataset
+# Day 2 — Your First Week at Superstore 🕵️
 
-A mini data project: take a messy public dataset and turn it into something
-clean and useful — in your own repository, running in **GitHub Codespaces**.
+**The scenario:** you've just joined *Superstore* as a data analyst. Leadership
+handed you a messy data export and a list of questions. Clean it, summarise it,
+brief them — and then see if Python can *predict* with it. All in your own
+repository, running in **GitHub Codespaces**.
 
 ## 1. Get your own copy
 
@@ -30,9 +32,16 @@ the terminal as you go.
 | 0 | `python src/explore.py` | Look at the raw data (nothing to fill in). |
 | 1 | `python src/clean.py` | Fix encoding, dates, columns, duplicates, missing values → `output/clean.csv`. |
 | 2 | `python src/transform.py` | Add columns, group & summarise → `output/summary_*.csv`. |
-| 3 | `python src/questions.py` | Answer business questions with code. |
+| 3 | `python src/questions.py` | Answer leadership's questions with code. |
 
 Each `# TODO` has a one-line hint. Stuck? Ask — that's what the trainer is for.
+
+### 🎁 Bonus — see it & predict it
+
+Open `notebooks/02_predict.ipynb` and run it. You'll **chart** your cleaned data
+and build two tiny **machine-learning** models to predict order profit — a fun
+taste of where Python can take you. (`matplotlib` and `scikit-learn` are already
+installed by the devcontainer.)
 
 ## 5. Ship it
 
