@@ -244,6 +244,50 @@ raw.sort_values(["Region", "Order ID"])
 
 """))
 
+    C(md("""
+### Picking by label vs position — `loc` and `iloc`
+
+Two precise ways to grab specific rows and columns:
+- **`.loc[]`** selects by **label** — the row's index and the **column name**.
+- **`.iloc[]`** selects by **integer position** — plain row/column numbers.
+"""))
+
+    C(code("""
+raw.loc[0]                          # the row whose index label is 0 (a Series)
+"""))
+
+    C(code("""
+raw.loc[0, "Region"]                # a single cell: row label 0, column "Region"
+"""))
+
+    C(code("""
+raw.loc[0:2, ["Region", "Sales"]]   # label slicing is INCLUSIVE -> rows 0, 1 AND 2
+"""))
+
+    C(code("""
+raw.iloc[0]                         # the FIRST row, by position
+"""))
+
+    C(code("""
+raw.iloc[0:2, 0:2]                  # position slicing is end-EXCLUSIVE -> rows 0,1 & cols 0,1
+"""))
+
+    C(md("""
+💡 Rule of thumb: use **`loc`** when you know the **name/label**, **`iloc`** when
+you know the **position**. The classic gotcha: `loc[0:2]` *includes* row 2, but
+`iloc[0:2]` stops *before* it.
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Use `iloc` to grab the **last row** of `raw`.
+(Hint: the last position is `-1`.)
+"""))
+
+    C(code("""
+# TODO: get the last row of raw using iloc
+
+"""))
+
     # ----- Block 2: cleaning -----
     C(md("""
 ---
