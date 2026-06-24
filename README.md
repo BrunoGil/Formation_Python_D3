@@ -9,7 +9,7 @@ analytics.
 |-----|-------|
 | [Day 1](day-01/) | Python Foundations + Getting Your Data In |
 | [Day 2](day-02/) | Manipulating & Cleaning Data |
-| Day 3 | Visualizing & Reporting |
+| [Day 3](day-03/) | Visualizing & Reporting |
 | Day 4 | From Notebook to Pipeline (+ Airflow awareness) |
 
 Each day has its own folder with a `README`, teaching notebook, exercises, and
