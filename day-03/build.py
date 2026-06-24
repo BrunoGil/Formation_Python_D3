@@ -172,6 +172,29 @@ plt.title("Discount vs profit")
 
 """))
 
+    C(md("""
+### A heatmap — two dimensions at once
+
+A `pivot_table` summarises by **two** categories at once (region × category); a
+seaborn **heatmap** colours the grid so the hot/cold spots jump out.
+"""))
+
+    C(code("""
+pivot = df.pivot_table(values="sales", index="region", columns="category", aggfunc="sum")
+sns.heatmap(pivot, annot=True, fmt=".0f", cmap="Blues")
+plt.title("Sales by region and category")
+"""))
+
+    C(md("""
+🏋️ **Your turn.** Make the same heatmap but for **profit** instead of sales.
+(Hint: change `values="profit"`.)
+"""))
+
+    C(code("""
+# TODO: heatmap of profit by region and category
+
+"""))
+
     # ---- Block 3 ----
     C(md("""
 ---
@@ -196,6 +219,19 @@ px.line(monthly, x="order_date", y="sales", title="Sales over time")
 # Hover over points to see the product name.
 px.scatter(df.sample(1000, random_state=0), x="sales", y="profit",
            color="category", hover_data=["product_name"], title="Sales vs profit")
+"""))
+
+    C(md("""
+### Grouped bars — compare across two categories
+
+`color=` plus `barmode="group"` splits each region's bar by category — great for
+side-by-side comparison.
+"""))
+
+    C(code("""
+grouped = df.groupby(["region", "category"])["sales"].sum().reset_index()
+px.bar(grouped, x="region", y="sales", color="category", barmode="group",
+       title="Sales by region and category")
 """))
 
     C(md("""

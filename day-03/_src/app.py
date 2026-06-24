@@ -37,13 +37,17 @@ chosen = st.sidebar.multiselect("Region", regions, default=regions)
 
 view = df[df["region"].isin(chosen)]
 
+if view.empty:
+    st.warning("Pick at least one region to see the dashboard.")
+    st.stop()
+
 # ---------------- KPI row ----------------
 c1, c2, c3 = st.columns(3)
 c1.metric("Total sales", f"${view['sales'].sum():,.0f}")
 #--SOLUTION:add a "Total profit" metric in column c2, formatted like total sales
 c2.metric("Total profit", f"${view['profit'].sum():,.0f}")
 #--END
-c3.metric("Orders", f"{view['order_id'].nunique():,}")
+c3.metric("Orders", f"{view['order_id'].nunique():,}", help="Unique orders (not line items)")
 
 # ---------------- Charts ----------------
 st.subheader("Sales by region")
