@@ -113,6 +113,10 @@ Pick the chart from the **question**, not the other way round:
 | How is one number spread out? | **Histogram** |
 
 A chart that answers the question in two seconds beats a pretty one that doesn't.
+
+💬 **Quick poll for the room:** "How did our sales change over the year?" — which
+chart? "Which region sells most?" — which chart? Get them committing to an
+answer before you scroll on.
 """))
 
     # ---- Block 2 ----
@@ -195,6 +199,25 @@ plt.title("Sales by region and category")
 
 """))
 
+    C(md("""
+### 🔎 A real insight — predict first!
+
+🤔 **Predict before you run the next cell:** which product **sub-category** do
+you think actually *loses* money? Everyone jot a guess.
+"""))
+
+    C(code("""
+df.groupby("sub_category")["profit"].sum().sort_values().plot(
+    kind="barh", figsize=(7, 5), title="Total profit by sub-category")
+"""))
+
+    C(md("""
+💬 **Discuss:** several sub-categories are in the **red**. *Tables* sells a lot
+but **loses money** (it gets discounted hard). A chart surfaces this in seconds;
+a spreadsheet hides it. Ask the room: *would you keep selling Tables?* This is
+the moment they realise charts aren't decoration — they drive decisions.
+"""))
+
     # ---- Block 3 ----
     C(md("""
 ---
@@ -241,6 +264,48 @@ px.bar(grouped, x="region", y="sales", color="category", barmode="group",
 
     C(code("""
 # TODO: plotly bar of sales per segment
+
+"""))
+
+    # ---- Block 3.5: interactivity ----
+    C(md("""
+---
+## Block 3½ — Make it interactive 🎛️
+
+Charts get *fun* when **you** control them. `ipywidgets` adds dropdowns and
+sliders that redraw a chart instantly — no server, just the notebook.
+
+Run the next cell, then **drag the slider / change the dropdown** and watch.
+"""))
+
+    C(code("""
+from ipywidgets import interact
+
+@interact(category=["All"] + sorted(df["category"].unique()))
+def sales_by_region(category="All"):
+    d = df if category == "All" else df[df["category"] == category]
+    d.groupby("region")["sales"].sum().plot(kind="bar", title=f"Sales by region — {category}")
+"""))
+
+    C(code("""
+@interact(n=(3, 15))
+def top_products(n=5):
+    (df.groupby("product_name")["sales"].sum()
+       .sort_values(ascending=False).head(n)
+       .plot(kind="barh", title=f"Top {n} products by sales"))
+"""))
+
+    C(md("""
+💬 **Speaking point:** "You just built a mini interactive report in *four lines*.
+Imagine handing that to your manager — except they can't run a notebook. So next
+we turn this into a **real web app** anyone can open with a link: **Streamlit**."
+
+🏋️ **Your turn.** Copy the dropdown example, but plot **profit** per `segment`
+instead of sales per region.
+"""))
+
+    C(code("""
+# TODO: an @interact dropdown that plots profit per segment
 
 """))
 
