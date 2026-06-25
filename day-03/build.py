@@ -295,6 +295,14 @@ def top_products(n=5):
        .plot(kind="barh", title=f"Top {n} products by sales"))
 """))
 
+    C(code("""
+@interact(region=["All"] + sorted(df["region"].unique()))
+def monthly_trend(region="All"):
+    d = df if region == "All" else df[df["region"] == region]
+    (d.groupby(d["order_date"].dt.to_period("M").dt.to_timestamp())["sales"]
+       .sum().plot(marker="o", title=f"Monthly sales — {region}"))
+"""))
+
     C(md("""
 💬 **Speaking point:** "You just built a mini interactive report in *four lines*.
 Imagine handing that to your manager — except they can't run a notebook. So next
